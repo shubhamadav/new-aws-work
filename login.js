@@ -42,4 +42,20 @@ app.get("/expenses",function(req , res){
      res.sendFile(__dirname + "/expenses.html");
 })
 
+app.post("/expenses", (req, res) => {
+    const { item, number } = req.body; 
+    const qry2 = "INSERT INTO expenses (item, number) VALUES (?, ?)";
+  
+    dbConnection.query(qry2, [item, number], (err, results) => {
+      if (err) {
+        console.error("Error inserting data:", err);
+        res.render("add", { mesg: false });
+      } else if (results.affectedRows > 0) {
+        res.render("add", { mesg: true });
+      } else {
+        res.render("add", { mesg: false });
+      }
+    });
+  });
+
 app.listen(4500);
